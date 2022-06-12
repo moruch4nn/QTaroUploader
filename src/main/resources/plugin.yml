@@ -1,0 +1,4 @@
+main: dev.moru3.qtarouploader.QTaroUploader
+version: 1.0
+api-version: 1.19
+name: QTaroUploaderV2
