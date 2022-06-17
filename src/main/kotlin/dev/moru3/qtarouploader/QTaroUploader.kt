@@ -1,6 +1,7 @@
 package dev.moru3.qtarouploader
 
 import dev.moru3.minepie.config.Config
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -11,9 +12,11 @@ import java.io.File
 
 class QTaroUploader: JavaPlugin() {
     lateinit var config: Config
+
+    private lateinit var jda: JDA
     override fun onEnable() {
         config = Config(this, "config.yml")
-        val jda = JDABuilder.createDefault(System.getenv("QTAROBOT_TOKEN"))
+        jda = JDABuilder.createDefault(System.getenv("QTAROBOT_TOKEN"))
             .addEventListeners(object: ListenerAdapter() {
                 override fun onMessageReceived(event: MessageReceivedEvent) {
                     if(event.channel.type == ChannelType.PRIVATE) {
@@ -26,7 +29,10 @@ class QTaroUploader: JavaPlugin() {
                         server.consoleSender.sendMessage(message)
                     }
                 }
-            })
-        jda.build()
+            }).build()
+    }
+
+    override fun onDisable() {
+        jda.shutdownNow()
     }
 }
